@@ -114,6 +114,10 @@ export class DatabaseQetaStore implements QetaStore {
   ): Promise<Questions> {
     const query = this.getQuestionBaseQuery(user_ref);
 
+    if(options.fromDate && options.toDate){
+      query.whereBetween('questions.created', [`${options.fromDate} 00:00:00.000+00`, `${options.toDate} 23:59:59.999+00`])
+    }
+
     if (options.author) {
       query.where('questions.author', '=', options.author);
     }

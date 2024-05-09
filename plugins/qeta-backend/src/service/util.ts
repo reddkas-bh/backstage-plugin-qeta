@@ -103,6 +103,26 @@ export const getCreated = async (
   return new Date();
 };
 
+export const validDateRange = (
+  fromDate: string, toDate: string
+): {isValid: boolean, error?: string, field?: string} => {
+  if (fromDate && toDate) {
+    const fromDateNewDate = new Date(fromDate);
+    const toDateNewDate = new Date(toDate);
+    if (fromDateNewDate <= toDateNewDate) {
+      return { isValid: true};
+    } else {
+      return { isValid: false, error: "From Date should be less than To Date" }
+    }
+  } else if (!fromDate && toDate) {
+    return { isValid: false, field: "fromDate", error: "Please enter from date in format YYYY-MM-DD" };
+  } else if (fromDate && !toDate) {
+    return { isValid: false, field: "toDate", error: "Please enter to date in format YYYY-MM-DD" };
+  }
+
+  return { isValid: true };
+}
+
 export const checkPermissions = async (
   request: Request<unknown>,
   permission: BasicPermission,

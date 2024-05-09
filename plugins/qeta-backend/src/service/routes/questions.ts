@@ -5,6 +5,7 @@ import {
   getUsername,
   isModerator,
   mapAdditionalFields,
+  validDateRange,
 } from '../util';
 import Ajv from 'ajv';
 import { Request, Router } from 'express';
@@ -37,6 +38,15 @@ export const questionsRoutes = (router: Router, options: RouteOptions) => {
       response
         .status(400)
         .send({ errors: validateQuery.errors, type: 'query' });
+      return;
+    }
+
+    // Date Range Validation
+    const validDate = validDateRange(request.query.fromDate as string, request.query.toDate as string);
+    if(!validDate?.isValid){
+      response
+      .status(400)
+      .send(validDate);
       return;
     }
 
